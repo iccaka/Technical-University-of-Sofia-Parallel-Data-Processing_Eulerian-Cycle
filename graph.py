@@ -6,9 +6,9 @@ class Graph:
     # E - Edge
     def __init__(self, V, E):
         self.V = set(V)
-        self.E = set(frozenset(E))
+        self.E = set(frozenset((u, v)) for u, v in E)
         self._neighbors = {}
-        for v in self.V:
+        for v in V:
             self._neighbors[v] = set()
         for u, v in self.E:
             self._neighbors[u].add(v)
@@ -23,28 +23,40 @@ class Graph:
         return iter(self._neighbors[v])
 
     def remove_vertex(self, u):
-        todelete = list(self.neighbors(u))
-        for v in todelete:
-            self.remove_edge(u, v)
-        del self._neighbors[u]
+        if u in self.V:
+            todelete = list(self.neighbors(u))
+            for v in todelete:
+                self.remove_edge(u, v)
+            del self._neighbors[u]
+            self.V.remove(u)
+        else:
+            print("No such vertex exists!")
 
     def add_vertex(self, v):
-        if v not in self._neighbors:
+        if v not in self.V:
+            self.V.add(v)
             self._neighbors[v] = set()
 
     # Removes an edge connecting two vertices
     def remove_edge(self, u, v):
-        e = frozenset([u, v])
-        # Checks to see if such an edge exists
-        if e in self.E:
-            self.E.remove(e)
-            self._neighbors[u].remove(v)
-            self._neighbors[v].remove(u)
+        if u in self.V and v in self.V:
+            e = frozenset((u, v))
+            # Checks to see if such an edge exists
+            if e in self.E:
+                self.E.remove(e)
+                self._neighbors[u].remove(v)
+                self._neighbors[v].remove(u)
+            else:
+                print(f"There is no such edge connecting vertices {u} and {v}!")
+        else:
+            print("One or all of the vertices are not part of this graph!")
 
     # Adds an edge connecting two vertices
     def add_edge(self, u, v):
-        self.add_vertex(u)
-        self.add_vertex(v)
+        if u not in self.V:
+            self.add_vertex(u)
+        if v not in self.V:
+            self.add_vertex(v)
         self.E.add(frozenset([u, v]))
         self._neighbors[u].add(v)
         self._neighbors[v].add(u)
@@ -84,6 +96,7 @@ class Graph:
         path = []
         while deque:
             path.append(deque.removefirst())
+        return path
 
     def euler_tour(self):
         if self.is_eulerian():
@@ -100,6 +113,8 @@ class Graph:
                     current_vertex = path.removefirst()
                     path.addlast(current_vertex)
             return self.deque_to_tour(path)
+        else:
+            print("The specified graph is not eulerian!")
 
     def get_any_vertex(self):
         return next(iter(self._neighbors))
@@ -107,7 +122,7 @@ class Graph:
     # Checks if the degree of every edge is greater than 0
     def is_connected(self):
         v = self.get_any_vertex()
-        return len(self.depth_first_search(v)) == len(self.E)
+        return len(self.depth_first_search(v)) == len(self.V)
 
     # Checks if two edges are connected to each other
     def are_connected(self, u, v):
