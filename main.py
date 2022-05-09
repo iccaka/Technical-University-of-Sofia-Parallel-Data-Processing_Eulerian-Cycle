@@ -1,18 +1,4 @@
 from graph import Graph
-from linked_list import LinkedList
-
-
-class CycleFinder:
-    @staticmethod
-    def find_cycles(G):
-        if not G.is_eulerian():
-            print("An Eulerian Cycle for the given graph is not possible.")
-            return
-
-        verticesn = len(G.V)
-        edgesn = len(G.E)
-        path = LinkedList()
-
 
 if __name__ == '__main__':
     G = Graph([1, 2, 3, 4, 5, 6, 7], {(1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
