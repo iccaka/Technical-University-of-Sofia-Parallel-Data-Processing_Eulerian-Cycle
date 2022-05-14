@@ -1,3 +1,6 @@
+import datetime
+import time
+
 from ds2.deque import DoublyLinkedList as Deque
 
 
@@ -98,11 +101,12 @@ class Graph:
             path.append(deque.removefirst())
         return path
 
-    def euler_tour(self):
+    def euler_tour(self, v):
         if self.is_eulerian():
+            before = datetime.datetime.now().microsecond
             path = Deque()
             H = Graph(self.V, self.E)
-            current_vertex = H.get_any_vertex()
+            current_vertex = v
             while len(H.E) > 0:
                 if H.deg(current_vertex) > 0:
                     next_vertex = next(H.neighbors(current_vertex))
@@ -112,7 +116,10 @@ class Graph:
                 else:
                     current_vertex = path.removefirst()
                     path.addlast(current_vertex)
-            return self.deque_to_tour(path)
+            after = datetime.datetime.now().microsecond
+            print(f"Thread N{v} took {after - before} microseconds")
+            dtt = self.deque_to_tour(path)
+            print(dtt)
         else:
             print("The specified graph is not eulerian!")
 
