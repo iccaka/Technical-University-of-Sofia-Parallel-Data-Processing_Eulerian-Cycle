@@ -1,51 +1,66 @@
-import datetime
-
 from graph import Graph
 import time
 import threading
 
 
-def do_something():
-    print("hi")
-    time.sleep(0.5)
+def create_graph(size):
+    G = Graph([], {})
+    for x in range(1, size + 1):
+        G.add_vertex(x)
+    for x in range(1, size + 1):
+        for y in range(x + 1, size + 1):
+            G.add_edge(x, y)
+    return G
 
 
 if __name__ == '__main__':
-    G = Graph([1, 2, 3, 4, 5, 6, 7], {(1, 2), (1, 3), (1, 4), (1, 5), (1, 6), (1, 7),
-                                      (2, 3), (2, 4), (2, 5), (2, 6), (2, 7),
-                                      (3, 4), (3, 5), (3, 6), (3, 7),
-                                      (4, 5), (4, 6), (4, 7),
-                                      (5, 6), (5, 7),
-                                      (6, 7)})
+    G1 = create_graph(33)
+    G2 = create_graph(77)
+    G3 = create_graph(99)
+    graphs = [G1, G2, G3]
 
-    before = datetime.datetime.now().microsecond
-
-    print("Nonparallel way:")
-
-    for x in G.V:
-        G.euler_tour(x)
-
-    after = datetime.datetime.now().microsecond
+    print("Nonparallel, single vertex:")
+    before = time.perf_counter()
+    for x in graphs:
+        x.euler_tour(1)
+    after = time.perf_counter()
     difference = after - before
+    print(f"It took {difference} seconds")
 
-    print(f"Time it took(nonparallel): {difference} microseconds")
-    print(f"\n=====================================\n")
-    print("Parallel way:")
-
+    print("Parallel, single vertex:")
     threads = []
-    for x in G.V:
-        t = threading.Thread(target=G.euler_tour, args=(x, ))
-        threads.append(t)
-
-    before = datetime.datetime.now().microsecond
-
+    before = time.perf_counter()
+    for x in graphs:
+        thread = threading.Thread(target=x.euler_tour, args=(1, ))
+        threads.append(thread)
     for x in threads:
         x.start()
-
     for x in threads:
         x.join()
-
-    after = datetime.datetime.now().microsecond
+    after = time.perf_counter()
     difference = after - before
+    print(f"Threads took {difference} seconds")
 
-    print(f"Time it took(parallel): {difference} microseconds")
+    print("Nonparallel, all vertices:")
+    for x in graphs:
+        before = time.perf_counter()
+        for y in x.V:
+            x.euler_tour(y)
+        after = time.perf_counter()
+        difference = after - before
+        print(f"It took {difference} seconds")
+
+    print("Parallel, all vertices:")
+    for x in graphs:
+        threads = []
+        for y in x.V:
+            thread = threading.Thread(target=x.euler_tour, args=(y, ))
+            threads.append(thread)
+        before = time.perf_counter()
+        for z in threads:
+            z.start()
+        for z in threads:
+            z.join()
+        after = time.perf_counter()
+        difference = after - before
+        print(f"Threads took {difference} seconds")
