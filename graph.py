@@ -103,7 +103,6 @@ class Graph:
 
     def euler_tour(self, v):
         if self.is_eulerian():
-            before = datetime.datetime.now().microsecond
             path = Deque()
             H = Graph(self.V, self.E)
             current_vertex = v
@@ -116,10 +115,8 @@ class Graph:
                 else:
                     current_vertex = path.removefirst()
                     path.addlast(current_vertex)
-            after = datetime.datetime.now().microsecond
-            print(f"Thread N{v} took {after - before} microseconds")
             dtt = self.deque_to_tour(path)
-            print(dtt)
+            return dtt
         else:
             print("The specified graph is not eulerian!")
 
