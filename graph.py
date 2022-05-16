@@ -21,10 +21,11 @@ class Graph:
     def deg(self, v):
         return len(self._neighbors[v])
 
-    # Returns an iterator object with all the neighbors
+    # Returns an iterator object with all the neighbors of the given vertex v
     def neighbors(self, v):
         return iter(self._neighbors[v])
 
+    # Returns vertex u if it is in self.V. Also removes all the edges containing the given vertex u
     def remove_vertex(self, u):
         if u in self.V:
             todelete = list(self.neighbors(u))
@@ -35,6 +36,7 @@ class Graph:
         else:
             print("No such vertex exists!")
 
+    # Adds vertex v if it already doesn't exist
     def add_vertex(self, v):
         if v not in self.V:
             self.V.add(v)
@@ -123,15 +125,15 @@ class Graph:
     def get_any_vertex(self):
         return next(iter(self._neighbors))
 
-    # Checks if the degree of every edge is greater than 0
+    # Checks if the degree of every vertex is greater than 0
     def is_connected(self):
         v = self.get_any_vertex()
         return len(self.depth_first_search(v)) == len(self.V)
 
-    # Checks if two edges are connected to each other
+    # Checks if there's a possible path between given vertices u and v
     def are_connected(self, u, v):
         return v in self.depth_first_search(u)
 
-    # Check if the graph is eulerian
+    # Check if the current graph is eulerian
     def is_eulerian(self):
         return self.is_connected() and all(self.deg(v) % 2 == 0 for v in self.V)
