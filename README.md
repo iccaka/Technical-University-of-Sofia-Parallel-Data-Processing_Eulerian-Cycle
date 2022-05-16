@@ -1,6 +1,6 @@
 # Technical-University-of-Sofia-Parallel-Data-Processing_Eulerian-Cycle
 
-*A program whose purpose is to find an eulerian cycle in a given graph. There's also a demo, showcasing how the program speeds up or slows down depending on whether multithreading or multiprocessing is used.*
+*A program whose purpose is to find an eulerian cycle in a given graph. There's also a demo, showcasing how the program speeds up or slows down depending on whether nonparallel, multithreading or multiprocessing way is used.*
 
 ## Built With
 
