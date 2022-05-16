@@ -14,4 +14,4 @@ See also the list of [contributors](https://github.com/iccaka/Technical-Universi
 
 ## License
 
-This project is licensed under the MIT License - *see the* [LICENSE.md]() *file for details.*
+This project is licensed under the MIT License - *see the* [LICENSE.md](https://github.com/iccaka/Technical-University-of-Sofia-Parallel-Data-Processing_Eulerian-Cycle/blob/master/LICENSE.md) *file for details.*
