@@ -79,7 +79,7 @@ if __name__ == '__main__':
             z.join()
         after = time.perf_counter()
         difference = after - before
-        print(f"Threads took {difference} seconds")
+        print(f"\tThreads took {difference} seconds")
 
     print("Multiprocessing, all vertices:")
     for x in graphs:
